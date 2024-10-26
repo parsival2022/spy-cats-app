@@ -5,7 +5,7 @@ from .models import Cat, Mission, Target
 class TargetSerializer(ModelSerializer):
     class Meta:
         model = Target
-        fields = [ 'name', 'country', 'notes', 'complete']
+        fields = ['name', 'country', 'notes', 'complete']
         
 
     def validate_notes(self, note):
