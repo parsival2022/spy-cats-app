@@ -13,11 +13,14 @@ class TargetSerializer(ModelSerializer):
                 note = str(note)
             except TypeError:
                 raise ValidationError("Cannot convert note to a string")
-        if self.instance.complete:
-            raise ValidationError("Cannot update notes as the target is already completed.")
-        if self.instance.mission.complete:
-            raise ValidationError("Cannot update notes as the mission is already completed.")
-        date = datetime.now().strftime()
+        try:
+            if self.instance.complete:
+                raise ValidationError("Cannot update notes as the target is already completed.")
+            if self.instance.mission.complete:
+                raise ValidationError("Cannot update notes as the mission is already completed.")
+        except AttributeError:
+            pass
+        date = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
         return {date: note}
     
     def update(self, instance, validated_data):
@@ -43,3 +46,4 @@ class MissionSerializer(ModelSerializer):
         for target in targets:
             Target.objects.create(mission=mission, **target)
         return mission
+    
