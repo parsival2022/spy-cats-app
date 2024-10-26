@@ -5,7 +5,8 @@ from .models import Cat, Mission, Target
 class TargetSerializer(ModelSerializer):
     class Meta:
         model = Target
-        fields = ['name', 'country', 'notes', 'complete']
+        fields = [ 'name', 'country', 'notes', 'complete']
+        
 
     def validate_notes(self, note):
         if not isinstance(note, str):
@@ -43,7 +44,8 @@ class MissionSerializer(ModelSerializer):
         targets = validated_data.pop('targets')
         mission = Mission.objects.create(**validated_data)
         
-        for target in targets:
-            Target.objects.create(mission=mission, **target)
+        if targets: 
+            for target in targets:
+                self.targets.create(mission=mission, **target)
         return mission
     
